@@ -31,7 +31,7 @@ export default function Home() {
             Generate Qr Code
           </button>
         </div>
-        <QRCode value={qrCodeUrl} />
+        <QRCode value={`https://${qrCodeUrl}`} />
       </div>
     </div>
   );
