@@ -21,7 +21,7 @@ export default function Home() {
   };
   const handleDownloadQrCode = () => {
     {
-      const svg = document.querySelector('svg');
+      const svg = document.querySelector('#qrCode');
       if (svg) {
         const svgData = new XMLSerializer().serializeToString(svg);
         const canvas = document.createElement('canvas');
@@ -56,7 +56,7 @@ export default function Home() {
           </button>
         </div>
         <div className="p-4 border shadow-lg">
-          <QRCode className="shadow-sm" value={`${qrCodeUrl}`} />
+          <QRCode id="qrCode" className="shadow-sm" value={`${qrCodeUrl}`} />
         </div>
       </div>
     </div>
