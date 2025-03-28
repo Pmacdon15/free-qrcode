@@ -1,7 +1,7 @@
 'use client'
 import QRCode from "react-qr-code";
 import { useState, useRef } from "react";
-import { FaDownload, FaMagic } from 'react-icons/fa';
+import { FaDownload } from 'react-icons/fa';
 
 export default function Home() {
 
@@ -85,10 +85,10 @@ function InputForm({ inputRef, onGenerate }: InputFormProps) {
         placeholder="Enter a URL"
       />
       <button
-         onClick={(e) => onGenerate(e)}
-        className="border shadow-lg text-white bg-blue-600 p-4 flex items-center justify-between w-2/6 active:bg-blue-300 hover:bg-blue-900 active:scale-105 transform transition-all duration-300 ease-in-out"
+        onClick={(e) => onGenerate(e)}
+        className="border shadow-lg text-white bg-blue-600 p-4 flex items-center justify-center w-2/6 active:bg-blue-300 hover:bg-blue-900 active:scale-105 transform transition-all duration-300 ease-in-out"
       >
-        Generate Qr Code  <FaMagic />
+        Generate Qr Code 
       </button>
     </form>
   )
