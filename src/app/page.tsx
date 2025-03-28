@@ -1,7 +1,7 @@
 'use client'
 import QRCode from "react-qr-code";
 import { useState, useRef } from "react";
-import { FaDownload , FaMagic} from 'react-icons/fa';
+import { FaDownload, FaMagic } from 'react-icons/fa';
 
 export default function Home() {
 
@@ -60,15 +60,17 @@ export default function Home() {
               Generate Qr Code  <FaMagic />
             </button>
           </div>
-            <button
+          <button
             onClick={handleDownloadQrCode}
             className="border shadow-lg text-white bg-green-600 p-4 flex items-center justify-between w-full  hover:bg-green-900 active:scale-105 transform transition-all duration-300 ease-in-out "
-            >
+          >
             <span className="flex-1 text-center">Download QR Code</span>
             <FaDownload />
-            </button>
+          </button>
         </div>
-        <QRCode className="shadow-lg" value={`${qrCodeUrl}`} />
+        <div className="p-4 border shadow-sm">
+          <QRCode className="shadow-lg" value={`${qrCodeUrl}`} />
+        </div>
       </div>
     </div>
   );
