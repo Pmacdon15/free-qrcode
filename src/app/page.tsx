@@ -8,7 +8,9 @@ export default function Home() {
   const [qrCodeUrl, setQRCodeUrl] = useState<string>("www.google.com");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleGenerateQRCode = () => {
+  const handleGenerateQRCode = (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent page reload
+    
     if (inputRef.current) {
       const value = inputRef.current.value;
       if (!value.startsWith('http://') && !value.startsWith('https://')) {
@@ -17,7 +19,6 @@ export default function Home() {
       setQRCodeUrl(inputRef.current.value);
     }
   };
-
   const handleDownloadQrCode = () => {
     {
       const svg = document.querySelector('svg');
@@ -42,24 +43,10 @@ export default function Home() {
   }
   return (
     <div className="flex flex-col justify-center items-center font-[family-name:var(--font-geist-sans)]">
-      <h1 className="flex flex-col items-center text-2xl mt-12 p-4 gap-4 w-5/6 md:w-3/6 border shadow-lg">Free Qr Code Generator</h1>
+      <Header />
       <div className="flex flex-col items-center mt-12 p-4 gap-4 w-5/6 md:w-3/6 border shadow-lg">
         <div className="flex flex-col gap-4 w-full">
-          <div className="flex gap-4 w-full">
-            <input
-              ref={inputRef}
-              className="w-full border p-2 shadow-lg"
-              type="text"
-              name="Url"
-              placeholder="Enter a URL"
-            />
-            <button
-              onClick={handleGenerateQRCode}
-              className="border shadow-lg text-white bg-blue-600 p-4 flex items-center justify-between w-2/6 active:bg-blue-300 hover:bg-blue-900 active:scale-105 transform transition-all duration-300 ease-in-out"
-            >
-              Generate Qr Code  <FaMagic />
-            </button>
-          </div>
+          <InputForm inputRef={inputRef} onGenerate={handleGenerateQRCode} />          
           <button
             onClick={handleDownloadQrCode}
             className="border shadow-lg text-white bg-green-600 p-4 flex items-center justify-between w-full  hover:bg-green-900 active:scale-105 transform transition-all duration-300 ease-in-out "
@@ -74,4 +61,35 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+function Header() {
+  return (
+    <h1 className="flex flex-col items-center text-2xl mt-12 p-4 gap-4 w-5/6 md:w-3/6 border shadow-lg">Free Qr Code Generator</h1>
+  )
+}
+
+interface InputFormProps {
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  onGenerate: (e: React.FormEvent) => void;
+}
+
+function InputForm({ inputRef, onGenerate }: InputFormProps) {
+  return(
+    <form className="flex gap-4 w-full">
+      <input
+        ref={inputRef}
+        className="w-full border p-2 shadow-lg"
+        type="text"
+        name="Url"
+        placeholder="Enter a URL"
+      />
+      <button
+         onClick={(e) => onGenerate(e)}
+        className="border shadow-lg text-white bg-blue-600 p-4 flex items-center justify-between w-2/6 active:bg-blue-300 hover:bg-blue-900 active:scale-105 transform transition-all duration-300 ease-in-out"
+      >
+        Generate Qr Code  <FaMagic />
+      </button>
+    </form>
+  )
 }
