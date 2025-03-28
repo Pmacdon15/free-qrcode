@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Free Qr Code Maker",
-  description: "Generate Free Qr Codes",
+  title: "Free QR Code Generator",
+  description: "Generate QR codes instantly - Simple, free, and no sign up required. Create and download QR codes for your URLs.",
 };
 
 export default function RootLayout({
