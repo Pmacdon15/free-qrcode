@@ -68,8 +68,8 @@ export default function Home() {
             <FaDownload />
           </button>
         </div>
-        <div className="p-4 border shadow-sm">
-          <QRCode className="shadow-lg" value={`${qrCodeUrl}`} />
+        <div className="p-4 border shadow-lg">
+          <QRCode className="shadow-sm" value={`${qrCodeUrl}`} />
         </div>
       </div>
     </div>
