@@ -42,33 +42,33 @@ export default function Home() {
   }
   return (
     <div className="flex flex-col justify-center items-center font-[family-name:var(--font-geist-sans)]">
-      <h1 className="flex flex-col items-center text-2xl mt-12 p-4 gap-4 w-5/6 md:w-3/6 border">Free Qr Code Generator</h1>
-      <div className="flex flex-col items-center mt-12 p-4 gap-4 w-5/6 md:w-3/6 border">
+      <h1 className="flex flex-col items-center text-2xl mt-12 p-4 gap-4 w-5/6 md:w-3/6 border shadow-lg">Free Qr Code Generator</h1>
+      <div className="flex flex-col items-center mt-12 p-4 gap-4 w-5/6 md:w-3/6 border shadow-lg">
         <div className="flex flex-col gap-4 w-full">
           <div className="flex gap-4 w-full">
             <input
               ref={inputRef}
-              className="w-full border p-2"
+              className="w-full border p-2 shadow-lg"
               type="text"
               name="Url"
               placeholder="Enter a URL"
             />
             <button
               onClick={handleGenerateQRCode}
-              className="border shadow-lg text-white bg-blue-600 p-4 flex items-center justify-between w-2/6 active:bg-blue-900 active:scale-105 transform transition-all duration-300 ease-in-out"
+              className="border shadow-lg text-white bg-blue-600 p-4 flex items-center justify-between w-2/6 active:bg-blue-300 hover:bg-blue-900 active:scale-105 transform transition-all duration-300 ease-in-out"
             >
               Generate Qr Code  <FaMagic />
             </button>
           </div>
             <button
             onClick={handleDownloadQrCode}
-            className="border shadow-lg text-white bg-green-600 p-4 flex items-center justify-between w-full active:bg-green-900 active:scale-105 transform transition-all duration-300 ease-in-out"
+            className="border shadow-lg text-white bg-green-600 p-4 flex items-center justify-between w-full  hover:bg-green-900 active:scale-105 transform transition-all duration-300 ease-in-out "
             >
             <span className="flex-1 text-center">Download QR Code</span>
             <FaDownload />
             </button>
         </div>
-        <QRCode value={`${qrCodeUrl}`} />
+        <QRCode className="shadow-lg" value={`${qrCodeUrl}`} />
       </div>
     </div>
   );
