@@ -5,7 +5,7 @@ import { FaDownload } from 'react-icons/fa';
 
 export default function Home() {
 
-  const [qrCodeUrl, setQRCodeUrl] = useState<string>("www.google.com");
+  const [qrCodeUrl, setQRCodeUrl] = useState<string>("https://www.patmac.ca");
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleGenerateQRCode = (e: React.FormEvent) => {
