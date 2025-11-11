@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.freeqrcode.patmac.ca
+
+# Sitemaps
+Sitemap: https://www.freeqrcode.patmac.ca/sitemap.xml
