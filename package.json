@@ -10,6 +10,7 @@
 		"postbuild": "next-sitemap --config next-sitemap.config.cjs"
 	},
 	"dependencies": {
+		"@vercel/analytics": "^1.5.0",
 		"next": "15.2.3",
 		"next-sitemap": "^4.2.3",
 		"react": "^19.0.0",
