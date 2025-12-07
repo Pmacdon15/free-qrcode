@@ -1,113 +1,317 @@
 'use client'
-import QRCode from "react-qr-code";
-import { useState, useRef } from "react";
-import { Download, QrCode as QrCodeIcon, Sparkles, Link as LinkIcon } from 'lucide-react';
+import {
+	Download,
+	Link as LinkIcon,
+	Palette,
+	QrCode as QrCodeIcon,
+	Sparkles,
+} from 'lucide-react'
+import { QRCodeSVG } from 'qrcode.react'
+import { useRef, useState } from 'react'
 
 export default function Home() {
+	const [qrCodeUrl, setQRCodeUrl] = useState<string>('https://www.patmac.ca')
+	const [fgColor, setFgColor] = useState<string>('#8b5cf6') // Purple
+	const [bgColor, setBgColor] = useState<string>('#ffffff') // White
+	const inputRef = useRef<HTMLInputElement>(null)
 
-  const [qrCodeUrl, setQRCodeUrl] = useState<string>("https://www.patmac.ca");
-  const inputRef = useRef<HTMLInputElement>(null);
+	const handleGenerateQRCode = (e: React.FormEvent) => {
+		e.preventDefault() // Prevent page reload
 
-  const handleGenerateQRCode = (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent page reload
-    
-    if (inputRef.current) {
-      const value = inputRef.current.value;
-      if (!value.startsWith('http://') && !value.startsWith('https://')) {
-        inputRef.current.value = 'https://' + value;
-      }
-      setQRCodeUrl(inputRef.current.value);
-    }
-  };
-  const handleDownloadQrCode = () => {
-    {
-      const svg = document.querySelector('#qrCode');
-      if (svg) {
-        const svgData = new XMLSerializer().serializeToString(svg);
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const img = new Image();
-        img.onload = () => {
-          canvas.width = img.width;
-          canvas.height = img.height;
-          ctx?.drawImage(img, 0, 0);
-          const pngFile = canvas.toDataURL('image/png');
-          const downloadLink = document.createElement('a');
-          downloadLink.download = 'QRCode.png';
-          downloadLink.href = pngFile;
-          downloadLink.click();
-        };
-        img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
-      }
-    }
-  }
-  return (
-    <div className="min-h-screen flex flex-col justify-center items-center font-[family-name:var(--font-geist-sans)] py-12 px-4">
-      <Header />
-      <div className="flex flex-col items-center mt-8 p-8 gap-8 w-full max-w-2xl glass rounded-3xl shadow-2xl">
-        <div className="flex flex-col gap-6 w-full">
-          <InputForm inputRef={inputRef} onGenerate={handleGenerateQRCode} />          
-          <button
-            onClick={handleDownloadQrCode}
-            className="group relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 p-4 flex items-center justify-center gap-3 w-full hover:from-purple-700 hover:to-blue-700 active:scale-95 transform transition-all duration-300 ease-in-out shadow-lg hover:shadow-purple-500/50"
-          >
-            <span className="flex items-center gap-3 text-white font-semibold text-lg">
-              <Download className="w-5 h-5" />
-              Download QR Code
-            </span>
-          </button>
-        </div>
-        <div className="p-8 glass rounded-2xl shadow-xl bg-white/10">
-          <QRCode id="qrCode" className="shadow-sm" value={`${qrCodeUrl}`} />
-        </div>
-      </div>
-    </div>
-  );
+		if (inputRef.current) {
+			const value = inputRef.current.value
+			if (!value.startsWith('http://') && !value.startsWith('https://')) {
+				inputRef.current.value = `https://${value}`
+			}
+			setQRCodeUrl(inputRef.current.value)
+		}
+	}
+
+	const handleDownloadQrCode = () => {
+		const svg = document.querySelector('#qrCode')
+		if (svg) {
+			const svgData = new XMLSerializer().serializeToString(svg)
+			const canvas = document.createElement('canvas')
+			const ctx = canvas.getContext('2d')
+			const img = new Image()
+			img.onload = () => {
+				canvas.width = img.width
+				canvas.height = img.height
+				ctx?.drawImage(img, 0, 0)
+				const pngFile = canvas.toDataURL('image/png')
+				if (pngFile) {
+					// Check if pngFile isn't empty
+					const downloadLink = document.createElement('a')
+					downloadLink.download = 'QRCode.png'
+					downloadLink.href = pngFile
+					downloadLink.click()
+				} else {
+					console.error('Failed to generate QR code image')
+				}
+			}
+			img.src = `data:image/svg+xml;base64,${btoa(svgData)}`
+		}
+	}
+
+	return (
+		<div className="flex min-h-screen flex-col items-center justify-center px-4 py-12 font-[family-name:var(--font-geist-sans)]">
+			<Header />
+			<div className="glass mt-8 flex w-full max-w-2xl flex-col items-center gap-8 rounded-3xl p-8 shadow-2xl">
+				<div className="flex w-full flex-col gap-6">
+					<InputForm
+						inputRef={inputRef}
+						onGenerate={handleGenerateQRCode}
+					/>
+
+					{/* Color Presets */}
+					<div className="glass rounded-2xl p-4">
+						<div className="mb-3 flex items-center gap-2 text-gray-300 text-sm">
+							<Sparkles className="h-4 w-4" />
+							Quick Styles
+						</div>
+						<div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
+							<button
+								className="glass rounded-lg p-3 transition-transform hover:scale-105"
+								onClick={() => {
+									setFgColor('#8b5cf6')
+									setBgColor('#ffffff')
+								}}
+								title="Purple Haze"
+								type="button"
+							>
+								<div
+									className="h-8 w-full rounded"
+									style={{
+										background:
+											'linear-gradient(135deg, #8b5cf6 0%, #ffffff 100%)',
+									}}
+								></div>
+							</button>
+							<button
+								className="glass rounded-lg p-3 transition-transform hover:scale-105"
+								onClick={() => {
+									setFgColor('#3b82f6')
+									setBgColor('#dbeafe')
+								}}
+								title="Ocean Blue"
+								type="button"
+							>
+								<div
+									className="h-8 w-full rounded"
+									style={{
+										background:
+											'linear-gradient(135deg, #3b82f6 0%, #dbeafe 100%)',
+									}}
+								></div>
+							</button>
+							<button
+								className="glass rounded-lg p-3 transition-transform hover:scale-105"
+								onClick={() => {
+									setFgColor('#f97316')
+									setBgColor('#fff7ed')
+								}}
+								title="Sunset"
+								type="button"
+							>
+								<div
+									className="h-8 w-full rounded"
+									style={{
+										background:
+											'linear-gradient(135deg, #f97316 0%, #fff7ed 100%)',
+									}}
+								></div>
+							</button>
+							<button
+								className="glass rounded-lg p-3 transition-transform hover:scale-105"
+								onClick={() => {
+									setFgColor('#10b981')
+									setBgColor('#ecfdf5')
+								}}
+								title="Forest"
+								type="button"
+							>
+								<div
+									className="h-8 w-full rounded"
+									style={{
+										background:
+											'linear-gradient(135deg, #10b981 0%, #ecfdf5 100%)',
+									}}
+								></div>
+							</button>
+							<button
+								className="glass rounded-lg p-3 transition-transform hover:scale-105"
+								onClick={() => {
+									setFgColor('#ec4899')
+									setBgColor('#fdf2f8')
+								}}
+								title="Rose Gold"
+								type="button"
+							>
+								<div
+									className="h-8 w-full rounded"
+									style={{
+										background:
+											'linear-gradient(135deg, #ec4899 0%, #fdf2f8 100%)',
+									}}
+								></div>
+							</button>
+							<button
+								className="glass rounded-lg p-3 transition-transform hover:scale-105"
+								onClick={() => {
+									setFgColor('#06b6d4')
+									setBgColor('#0f172a')
+								}}
+								title="Neon"
+								type="button"
+							>
+								<div
+									className="h-8 w-full rounded"
+									style={{
+										background:
+											'linear-gradient(135deg, #06b6d4 0%, #0f172a 100%)',
+									}}
+								></div>
+							</button>
+						</div>
+					</div>
+
+					{/* Color Customization */}
+					<div className="flex w-full flex-col gap-4 sm:flex-row">
+						<div className="glass flex-1 rounded-2xl p-4">
+							<label
+								className="mb-2 flex items-center gap-2 text-gray-300 text-sm"
+								htmlFor="fgColor"
+							>
+								<Palette className="h-4 w-4" />
+								QR Color
+							</label>
+							<div className="flex items-center gap-2">
+								<input
+									className="h-12 w-12 cursor-pointer rounded-lg border-2 border-white/20"
+									id="fgColor"
+									onChange={(e) => setFgColor(e.target.value)}
+									type="color"
+									value={fgColor}
+								/>
+								<input
+									className="glass flex-1 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+									onChange={(e) => setFgColor(e.target.value)}
+									type="text"
+									value={fgColor}
+								/>
+							</div>
+						</div>
+
+						<div className="glass flex-1 rounded-2xl p-4">
+							<label
+								className="mb-2 flex items-center gap-2 text-gray-300 text-sm"
+								htmlFor="bgColor"
+							>
+								<Palette className="h-4 w-4" />
+								Background
+							</label>
+							<div className="flex items-center gap-2">
+								<input
+									className="h-12 w-12 cursor-pointer rounded-lg border-2 border-white/20"
+									id="bgColor"
+									onChange={(e) => setBgColor(e.target.value)}
+									type="color"
+									value={bgColor}
+								/>
+								<input
+									className="glass flex-1 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+									onChange={(e) => setBgColor(e.target.value)}
+									type="text"
+									value={bgColor}
+								/>
+							</div>
+						</div>
+					</div>
+
+					<button
+						className="group relative flex w-full transform items-center justify-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 p-4 shadow-lg transition-all duration-300 ease-in-out hover:from-purple-700 hover:to-blue-700 hover:shadow-purple-500/50 active:scale-95"
+						onClick={handleDownloadQrCode}
+						type="button"
+					>
+						<span className="flex items-center gap-3 font-semibold text-lg text-white">
+							<Download className="h-5 w-5" />
+							Download QR Code
+						</span>
+					</button>
+				</div>
+				<div className="glass rounded-2xl bg-white/10 p-8 shadow-xl">
+					{qrCodeUrl && (
+						<QRCodeSVG
+							bgColor={bgColor}
+							fgColor={fgColor}
+							id="qrCode"
+							imageSettings={{
+								src: '',
+								x: undefined,
+								y: undefined,
+								height: 0,
+								width: 0,
+								excavate: true,
+							}}
+							includeMargin={true}
+							level="H"
+							size={256}
+							value={qrCodeUrl}
+						/>
+					)}
+				</div>
+			</div>
+		</div>
+	)
 }
 
 function Header() {
-  return (
-    <div className="flex flex-col items-center gap-4 text-center">
-      <div className="flex items-center gap-3">
-        <QrCodeIcon className="w-12 h-12 text-purple-400" strokeWidth={2} />
-        <Sparkles className="w-8 h-8 text-cyan-400 animate-pulse" />
-      </div>
-      <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
-        Free QR Code Generator
-      </h1>
-      <p className="text-gray-300 text-lg max-w-md">
-        Create stunning QR codes instantly. Simple, fast, and completely free.
-      </p>
-    </div>
-  )
+	return (
+		<div className="flex flex-col items-center gap-4 text-center">
+			<div className="flex items-center gap-3">
+				<QrCodeIcon
+					className="h-12 w-12 text-purple-400"
+					strokeWidth={2}
+				/>
+				<Sparkles className="h-8 w-8 animate-pulse text-cyan-400" />
+			</div>
+			<h1 className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text font-bold text-5xl text-transparent md:text-6xl">
+				Free QR Code Generator
+			</h1>
+			<p className="max-w-md text-gray-300 text-lg">
+				Create stunning QR codes instantly. Simple, fast, and completely
+				free.
+			</p>
+		</div>
+	)
 }
 
 interface InputFormProps {
-  inputRef: React.RefObject<HTMLInputElement | null>;
-  onGenerate: (e: React.FormEvent) => void;
+	inputRef: React.RefObject<HTMLInputElement | null>
+	onGenerate: (e: React.FormEvent) => void
 }
 
 function InputForm({ inputRef, onGenerate }: InputFormProps) {
-  return(
-    <form className="flex flex-col sm:flex-row gap-4 w-full">
-      <div className="relative flex-1">
-        <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-        <input
-          ref={inputRef}
-          className="w-full glass rounded-2xl pl-12 pr-4 py-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
-          type="text"
-          name="Url"
-          placeholder="Enter a URL"
-        />
-      </div>
-      <button
-        onClick={(e) => onGenerate(e)}
-        className="group relative overflow-hidden rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 px-8 py-4 flex items-center justify-center gap-2 hover:from-cyan-600 hover:to-blue-600 active:scale-95 transform transition-all duration-300 ease-in-out shadow-lg hover:shadow-cyan-500/50 whitespace-nowrap"
-      >
-        <QrCodeIcon className="w-5 h-5 text-white" />
-        <span className="text-white font-semibold">Generate</span>
-      </button>
-    </form>
-  )
+	return (
+		<form className="flex w-full flex-col gap-4 sm:flex-row">
+			<div className="relative flex-1">
+				<LinkIcon className="-translate-y-1/2 absolute top-1/2 left-4 h-5 w-5 text-gray-400" />
+				<input
+					className="glass w-full rounded-2xl py-4 pr-4 pl-12 text-white placeholder-gray-400 transition-all focus:outline-none focus:ring-2 focus:ring-purple-500"
+					name="Url"
+					placeholder="Enter a URL"
+					ref={inputRef}
+					type="text"
+				/>
+			</div>
+			<button
+				className="group relative flex transform items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 px-8 py-4 shadow-lg transition-all duration-300 ease-in-out hover:from-cyan-600 hover:to-blue-600 hover:shadow-cyan-500/50 active:scale-95"
+				onClick={(e) => onGenerate(e)}
+				type="button"
+			>
+				<QrCodeIcon className="h-5 w-5 text-white" />
+				<span className="font-semibold text-white">Generate</span>
+			</button>
+		</form>
+	)
 }
-
