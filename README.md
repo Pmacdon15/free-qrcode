@@ -5,6 +5,7 @@ A simple, free, and user-friendly QR code generator built with Next.js and React
 ## Features
 
 - **Generate QR Codes**: Enter a URL and instantly generate a QR code.
+- **Upload Logo**: Upload a custom logo to be displayed in the center of the QR code.
 - **Download QR Codes**: Download the generated QR code as a PNG file.
 - **Responsive Design**: Optimized for both desktop and mobile devices.
 - **No Sign-Up Required**: Use the app without any registration.
@@ -15,7 +16,7 @@ A simple, free, and user-friendly QR code generator built with Next.js and React
 - **React**: JavaScript library for building user interfaces.
 - **Tailwind CSS**: Utility-first CSS framework for styling.
 - **React Icons**: Icon library for React components.
-- **react-qr-code**: Library for generating QR codes.
+- **qrcode.react**: Library for generating QR codes.
 
 ## Installation
 
@@ -40,7 +41,8 @@ http://localhost:3000
 ## Usage
 1. Enter a URL in the input field.
 2. Click the Generate QR Code button to generate a QR code.
-3. Click the Download QR Code button to download the QR code as a PNG file.
+3. Optionally, upload a logo to be displayed in the center of the QR code.
+4. Click the Download QR Code button to download the QR code as a PNG file.
 
 Project Structure
 ```bash

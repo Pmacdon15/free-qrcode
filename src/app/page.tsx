@@ -13,6 +13,7 @@ export default function Home() {
 	const [qrCodeUrl, setQRCodeUrl] = useState<string>('https://www.patmac.ca')
 	const [fgColor, setFgColor] = useState<string>('#8b5cf6') // Purple
 	const [bgColor, setBgColor] = useState<string>('#ffffff') // White
+	const [logoImage, setLogoImage] = useState<string | null>(null)
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	const handleGenerateQRCode = (e: React.FormEvent) => {
@@ -53,6 +54,32 @@ export default function Home() {
 		}
 	}
 
+	const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0]
+		if (file) {
+			const reader = new FileReader()
+			reader.onload = (event) => {
+				if (event.target?.result) {
+					setLogoImage(event.target.result as string)
+				}
+			}
+			reader.readAsDataURL(file)
+		}
+	}
+
+	const handleRemoveLogo = () => {
+		setLogoImage(null)
+	}
+
+	const imageSettings = logoImage
+		? {
+				src: logoImage,
+				height: 50,
+				width: 50,
+				excavate: true,
+			}
+		: undefined
+
 	return (
 		<div className="flex min-h-screen flex-col items-center justify-center px-4 py-12 font-[family-name:var(--font-geist-sans)]">
 			<Header />
@@ -61,6 +88,12 @@ export default function Home() {
 					<InputForm
 						inputRef={inputRef}
 						onGenerate={handleGenerateQRCode}
+					/>
+
+					<LogoUpload
+						logoImage={logoImage}
+						onLogoUpload={handleLogoUpload}
+						onRemoveLogo={handleRemoveLogo}
 					/>
 
 					{/* Color Presets */}
@@ -245,14 +278,7 @@ export default function Home() {
 							bgColor={bgColor}
 							fgColor={fgColor}
 							id="qrCode"
-							imageSettings={{
-								src: '',
-								x: undefined,
-								y: undefined,
-								height: 0,
-								width: 0,
-								excavate: true,
-							}}
+							imageSettings={imageSettings}
 							includeMargin={true}
 							level="H"
 							size={256}
@@ -313,5 +339,53 @@ function InputForm({ inputRef, onGenerate }: InputFormProps) {
 				<span className="font-semibold text-white">Generate</span>
 			</button>
 		</form>
+	)
+}
+
+interface LogoUploadProps {
+	logoImage: string | null
+	onLogoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
+	onRemoveLogo: () => void
+}
+
+function LogoUpload({
+	logoImage,
+	onLogoUpload,
+	onRemoveLogo,
+}: LogoUploadProps) {
+	return (
+		<div className="glass rounded-2xl p-4">
+			<label
+				className="mb-2 flex items-center gap-2 text-gray-300 text-sm"
+				htmlFor="logo"
+			>
+				<Sparkles className="h-4 w-4" />
+				Upload Logo (optional)
+			</label>
+			{logoImage ? (
+				<div className="flex items-center gap-4">
+					<img
+						alt="Uploaded logo"
+						className="h-16 w-16 rounded-lg object-contain"
+						src={logoImage}
+					/>
+					<button
+						className="glass rounded-lg bg-red-500/20 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-red-500/40"
+						onClick={onRemoveLogo}
+						type="button"
+					>
+						Remove
+					</button>
+				</div>
+			) : (
+				<input
+					accept="image/*"
+					className="glass w-full cursor-pointer rounded-lg border-2 border-dashed border-white/20 bg-transparent p-4 text-sm text-white transition-all file:mr-4 file:cursor-pointer file:rounded-lg file:border-0 file:bg-purple-600 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-white hover:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+					id="logo"
+					onChange={onLogoUpload}
+					type="file"
+				/>
+			)}
+		</div>
 	)
 }
